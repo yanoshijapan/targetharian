@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Target Bulanan Yanoshi</title>
+    <title>Target Harian Yanoshi</title>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
     
     <style>
@@ -13,7 +13,7 @@
             --card-bg: #ffffff;
             --text-main: #1f2937;
             --text-muted: #6b7280;
-            --accent-red: #ef4444; /* Warna untuk angka kekurangan */
+            --accent-red: #ef4444; 
             --shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
             --radius: 16px;
         }
@@ -37,7 +37,7 @@
 
         .container {
             width: 100%;
-            max-width: 480px; /* Ukuran ideal mobile app view */
+            max-width: 480px; 
             background: var(--card-bg);
             border-radius: var(--radius);
             box-shadow: var(--shadow);
@@ -52,6 +52,7 @@
             padding: 30px 24px;
             color: white;
             text-align: center;
+            position: relative;
         }
 
         .header h1 {
@@ -66,6 +67,19 @@
         .header .date {
             font-size: 28px;
             font-weight: 700;
+            margin-bottom: 12px;
+        }
+
+        /* Style untuk Reminder Closing */
+        .header .deadline-badge {
+            display: inline-block;
+            background-color: rgba(255, 255, 255, 0.2);
+            padding: 6px 14px;
+            border-radius: 20px;
+            font-size: 13px;
+            font-weight: 500;
+            backdrop-filter: blur(4px);
+            border: 1px solid rgba(255, 255, 255, 0.3);
         }
 
         /* Content Section */
@@ -98,6 +112,7 @@
             font-size: 15px;
             color: var(--text-main);
             line-height: 1.5;
+            width: 100%;
         }
 
         .highlight-number {
@@ -153,6 +168,9 @@
         <div class="header">
             <h1>Hari Ini</h1>
             <div class="date" id="currentDate">-</div>
+            <div class="deadline-badge" id="closingCountdown">
+                Menghitung hari...
+            </div>
         </div>
 
         <div class="content">
@@ -170,29 +188,49 @@
         </div>
         
         <div class="footer">
-            Ayo semangat jualan!
+            Ayo semangat terus!
         </div>
     </div>
 
     <script>
         // --- KONFIGURASI ---
-        // GANTI URL DI BAWAH INI DENGAN URL DARI GOOGLE APPS SCRIPT ANDA
+        // JANGAN LUPA GANTI URL INI LAGI
         const CONST_GAS_URL = "https://script.google.com/macros/s/AKfycbzzWyRgZ2fk5NLCPyAViYHF6qyliNfi86ZsbqVHOsAIv3PcKFOK9-eq-4RrjVTkIw0I/exec"; 
 
-        // Fungsi untuk mendapatkan tanggal hari ini dalam format Indonesia
-        function updateDate() {
+        // Fungsi Update Tanggal & Deadline
+        function updateDateAndDeadline() {
             const now = new Date();
+            
+            // 1. Set Tanggal Hari Ini
             const options = { weekday: 'long', day: 'numeric', month: 'long', year: 'numeric' };
             const formattedDate = now.toLocaleDateString('id-ID', options);
             document.getElementById('currentDate').innerText = formattedDate;
+
+            // 2. Hitung Sisa Hari sampai Akhir Bulan
+            // Mendapatkan tahun dan bulan saat ini
+            const year = now.getFullYear();
+            const month = now.getMonth();
+            
+            // Mendapatkan tanggal terakhir bulan ini (hari ke-0 bulan berikutnya = hari terakhir bulan ini)
+            const lastDayOfMonth = new Date(year, month + 1, 0).getDate();
+            const currentDay = now.getDate();
+            
+            const remainingDays = lastDayOfMonth - currentDay;
+
+            // Update Text Reminder
+            const countdownEl = document.getElementById('closingCountdown');
+            if (remainingDays > 0) {
+                countdownEl.innerText = `Tinggal ${remainingDays} hari lagi sampai tanggal closing`;
+            } else if (remainingDays === 0) {
+                countdownEl.innerText = `Hari ini adalah tanggal closing!`;
+                countdownEl.style.backgroundColor = "rgba(239, 68, 68, 0.4)"; // Ubah jadi merah jika hari H
+            } else {
+                // Jaga-jaga error logika
+                countdownEl.style.display = 'none'; 
+            }
         }
 
-        // Fungsi Format Angka (opsional, jika ingin ribuan ada titiknya)
-        function formatNumber(num) {
-            return num.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".");
-        }
-
-        // Fungsi Utama Fetch Data
+        // Fungsi Fetch Data (Sama seperti sebelumnya)
         async function fetchData() {
             const loadingEl = document.getElementById('loading');
             const listEl = document.getElementById('dataList');
@@ -216,17 +254,15 @@
             }
         }
 
-        // Fungsi Render List ke HTML
+        // Fungsi Render List
         function renderList(items) {
             const listEl = document.getElementById('dataList');
-            listEl.innerHTML = ''; // Bersihkan list
+            listEl.innerHTML = ''; 
 
             items.forEach(item => {
                 const li = document.createElement('li');
                 li.className = 'item';
                 
-                // Format sesuai permintaan: "[Item] masih kurang [angka] pcs lagi"
-                // Menggunakan span pada angka agar bisa diberi warna/bold
                 li.innerHTML = `
                     <span class="item-text">
                         <b>${capitalizeFirstLetter(item.label)}</b> masih kurang 
@@ -241,9 +277,10 @@
             return string.charAt(0).toUpperCase() + string.slice(1);
         }
 
-        // Jalankan saat halaman dimuat
+        // Inisialisasi
         document.addEventListener('DOMContentLoaded', () => {
-            updateDate();
+            updateDateAndDeadline(); // Panggil fungsi tanggal baru
+            
             if (CONST_GAS_URL === "TEMPEL_URL_SCRIPT_ANDA_DISINI") {
                 alert("Harap ganti CONST_GAS_URL di dalam kode HTML dengan URL App Script Anda!");
             } else {
