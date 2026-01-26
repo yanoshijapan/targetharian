@@ -14,6 +14,8 @@
             --text-main: #1f2937;
             --text-muted: #6b7280;
             --accent-red: #ef4444; 
+            --accent-green: #10b981; /* Warna baru untuk sukses */
+            --bg-green: #d1fae5; /* Background hijau muda */
             --shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
             --radius: 16px;
         }
@@ -115,6 +117,7 @@
             width: 100%;
         }
 
+        /* Style untuk angka kurang (Merah) */
         .highlight-number {
             font-weight: 700;
             color: var(--accent-red);
@@ -123,6 +126,21 @@
             padding: 2px 8px;
             border-radius: 6px;
             margin: 0 4px;
+        }
+
+        /* Style untuk Target Tercapai (Hijau) */
+        .target-reached-badge {
+            font-weight: 700;
+            color: var(--accent-green);
+            font-size: 14px;
+            background-color: var(--bg-green);
+            padding: 4px 10px;
+            border-radius: 20px;
+            display: inline-flex;
+            align-items: center;
+            gap: 5px;
+            margin-left: 4px;
+            border: 1px solid rgba(16, 185, 129, 0.2);
         }
 
         /* Loading & Error States */
@@ -194,7 +212,7 @@
 
     <script>
         // --- KONFIGURASI ---
-        // JANGAN LUPA GANTI URL INI LAGI
+        // JANGAN LUPA GANTI URL INI LAGI SESUAI URL SCRIPT ANDA
         const CONST_GAS_URL = "https://script.google.com/macros/s/AKfycbzzWyRgZ2fk5NLCPyAViYHF6qyliNfi86ZsbqVHOsAIv3PcKFOK9-eq-4RrjVTkIw0I/exec"; 
 
         // Fungsi Update Tanggal & Deadline
@@ -230,7 +248,7 @@
             }
         }
 
-        // Fungsi Fetch Data (Sama seperti sebelumnya)
+        // Fungsi Fetch Data
         async function fetchData() {
             const loadingEl = document.getElementById('loading');
             const listEl = document.getElementById('dataList');
@@ -254,7 +272,7 @@
             }
         }
 
-        // Fungsi Render List
+        // Fungsi Render List (DIPERBARUI)
         function renderList(items) {
             const listEl = document.getElementById('dataList');
             listEl.innerHTML = ''; 
@@ -263,17 +281,37 @@
                 const li = document.createElement('li');
                 li.className = 'item';
                 
-                li.innerHTML = `
-                    <span class="item-text">
-                        <b>${capitalizeFirstLetter(item.label)}</b> masih kurang 
-                        <span class="highlight-number">${item.val}</span> pcs lagi
-                    </span>
-                `;
+                let htmlContent = '';
+
+                // --- LOGIKA BARU ---
+                // Jika nilai <= 0, tampilkan "sudah capai target" + Ceklis
+                if (item.val <= 0) {
+                    htmlContent = `
+                        <span class="item-text">
+                            <b>${capitalizeFirstLetter(item.label)}</b> 
+                            <span class="target-reached-badge">
+                                sudah capai target &#10003;
+                            </span>
+                        </span>
+                    `;
+                } 
+                // Jika nilai > 0, tampilkan "masih kurang X pcs"
+                else {
+                    htmlContent = `
+                        <span class="item-text">
+                            <b>${capitalizeFirstLetter(item.label)}</b> masih kurang 
+                            <span class="highlight-number">${item.val}</span> pcs lagi
+                        </span>
+                    `;
+                }
+                
+                li.innerHTML = htmlContent;
                 listEl.appendChild(li);
             });
         }
 
         function capitalizeFirstLetter(string) {
+            if (!string) return "";
             return string.charAt(0).toUpperCase() + string.slice(1);
         }
 
