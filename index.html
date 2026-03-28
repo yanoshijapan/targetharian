@@ -4,27 +4,23 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Target Harian Yanoshi</title>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     
     <style>
         :root {
-            --primary-color: #2563eb;
-            --bg-color: #f3f4f6;
+            --primary-color: #3b82f6;
+            --bg-color: #f1f5f9;
             --card-bg: #ffffff;
-            --text-main: #1f2937;
-            --text-muted: #6b7280;
+            --text-main: #1e293b;
+            --text-muted: #64748b;
             --accent-red: #ef4444; 
-            --accent-green: #10b981; /* Warna baru untuk sukses */
-            --bg-green: #d1fae5; /* Background hijau muda */
-            --shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
-            --radius: 16px;
+            --accent-green: #10b981; 
+            --accent-orange: #f59e0b;
+            --shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.05), 0 4px 6px -2px rgba(0, 0, 0, 0.025);
+            --radius: 20px;
         }
 
-        * {
-            box-sizing: border-box;
-            margin: 0;
-            padding: 0;
-        }
+        * { box-sizing: border-box; margin: 0; padding: 0; }
 
         body {
             font-family: 'Inter', sans-serif;
@@ -39,211 +35,219 @@
 
         .container {
             width: 100%;
-            max-width: 480px; 
-            background: var(--card-bg);
-            border-radius: var(--radius);
-            box-shadow: var(--shadow);
-            overflow: hidden;
-            margin-top: 20px;
+            max-width: 500px; 
+            background: transparent;
+            margin-top: 10px;
             animation: fadeIn 0.8s ease-out;
         }
 
-        /* Header Section */
-        .header {
-            background: linear-gradient(135deg, #1e40af 0%, #3b82f6 100%);
+        /* Header Card */
+        .header-card {
+            background: linear-gradient(135deg, #1e3a8a 0%, #3b82f6 100%);
             padding: 30px 24px;
             color: white;
             text-align: center;
-            position: relative;
+            border-radius: var(--radius);
+            box-shadow: var(--shadow);
+            margin-bottom: 20px;
         }
 
-        .header h1 {
-            font-size: 14px;
+        .header-card h1 {
+            font-size: 13px;
             text-transform: uppercase;
-            letter-spacing: 1.5px;
+            letter-spacing: 2px;
             opacity: 0.9;
-            margin-bottom: 5px;
+            margin-bottom: 8px;
             font-weight: 600;
         }
 
-        .header .date {
+        .header-card .date {
+            font-size: 26px;
+            font-weight: 700;
+            margin-bottom: 15px;
+        }
+
+        .deadline-badge {
+            display: inline-block;
+            background-color: rgba(255, 255, 255, 0.2);
+            padding: 8px 16px;
+            border-radius: 30px;
+            font-size: 13px;
+            font-weight: 500;
+            backdrop-filter: blur(8px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            margin-bottom: 15px;
+        }
+
+        /* Styling Ringkasan Total */
+        .total-summary {
+            background-color: rgba(0, 0, 0, 0.15);
+            padding: 15px;
+            border-radius: 12px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            animation: fadeIn 0.5s ease-out;
+        }
+
+        .total-summary p {
+            font-size: 12px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            opacity: 0.8;
+            margin-bottom: 5px;
+        }
+
+        .total-summary .total-numbers {
+            font-size: 20px;
+            font-weight: 400;
+        }
+
+        .total-summary .total-numbers strong {
             font-size: 28px;
             font-weight: 700;
+            color: #d1fae5; /* Warna hijau terang untuk yang tercapai */
+        }
+
+        /* Modern Item Cards */
+        .item-list { list-style: none; }
+
+        .item-card {
+            background: var(--card-bg);
+            padding: 20px;
+            border-radius: 16px;
+            margin-bottom: 16px;
+            box-shadow: var(--shadow);
+            border: 1px solid #e2e8f0;
+            transition: transform 0.2s ease, box-shadow 0.2s ease;
+        }
+
+        .item-card:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 15px 25px -5px rgba(0, 0, 0, 0.1);
+        }
+
+        .item-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
             margin-bottom: 12px;
         }
 
-        /* Style untuk Reminder Closing */
-        .header .deadline-badge {
-            display: inline-block;
-            background-color: rgba(255, 255, 255, 0.2);
-            padding: 6px 14px;
-            border-radius: 20px;
-            font-size: 13px;
-            font-weight: 500;
-            backdrop-filter: blur(4px);
-            border: 1px solid rgba(255, 255, 255, 0.3);
-        }
-
-        /* Content Section */
-        .content {
-            padding: 24px;
-        }
-
-        .item-list {
-            list-style: none;
-        }
-
-        .item {
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            padding: 16px 0;
-            border-bottom: 1px solid #e5e7eb;
-            transition: transform 0.2s ease;
-        }
-
-        .item:last-child {
-            border-bottom: none;
-        }
-
-        .item:hover {
-            transform: translateX(5px);
-        }
-
-        .item-text {
-            font-size: 15px;
-            color: var(--text-main);
-            line-height: 1.5;
-            width: 100%;
-        }
-
-        /* Style untuk angka kurang (Merah) */
-        .highlight-number {
-            font-weight: 700;
-            color: var(--accent-red);
+        .item-title {
             font-size: 16px;
-            background-color: #fee2e2;
-            padding: 2px 8px;
-            border-radius: 6px;
-            margin: 0 4px;
+            font-weight: 700;
+            color: var(--text-main);
         }
 
-        /* Style untuk Target Tercapai (Hijau) */
-        .target-reached-badge {
+        /* Status Badge */
+        .status-badge {
+            font-size: 12px;
             font-weight: 700;
-            color: var(--accent-green);
-            font-size: 14px;
-            background-color: var(--bg-green);
             padding: 4px 10px;
             border-radius: 20px;
             display: inline-flex;
             align-items: center;
-            gap: 5px;
-            margin-left: 4px;
-            border: 1px solid rgba(16, 185, 129, 0.2);
+            gap: 4px;
         }
+        .status-success { background-color: #d1fae5; color: var(--accent-green); border: 1px solid rgba(16, 185, 129, 0.3); }
+        .status-warning { background-color: #fef3c7; color: var(--accent-orange); border: 1px solid rgba(245, 158, 11, 0.3); }
+        .status-danger { background-color: #fee2e2; color: var(--accent-red); border: 1px solid rgba(239, 68, 68, 0.3); }
+
+        /* Progress Bar */
+        .progress-container {
+            width: 100%;
+            height: 10px;
+            background-color: #e2e8f0;
+            border-radius: 10px;
+            overflow: hidden;
+            margin-bottom: 12px;
+        }
+
+        .progress-bar {
+            height: 100%;
+            border-radius: 10px;
+            width: 0%; 
+            transition: width 1s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        /* Stats Row */
+        .stats-row {
+            display: flex;
+            justify-content: space-between;
+            font-size: 13px;
+            color: var(--text-muted);
+            font-weight: 500;
+            background: #f8fafc;
+            padding: 10px 12px;
+            border-radius: 10px;
+        }
+
+        .stat-val { font-weight: 700; color: var(--text-main); margin-left: 4px; }
+        .val-green { color: var(--accent-green); }
+        .val-red { color: var(--accent-red); }
 
         /* Loading & Error States */
-        #loading, #error {
-            text-align: center;
-            padding: 40px 0;
-            color: var(--text-muted);
-        }
-        
-        .spinner {
-            width: 40px;
-            height: 40px;
-            border: 4px solid #f3f3f3;
-            border-top: 4px solid var(--primary-color);
-            border-radius: 50%;
-            margin: 0 auto 15px;
-            animation: spin 1s linear infinite;
-        }
+        #loading, #error { text-align: center; padding: 40px 0; color: var(--text-muted); background: var(--card-bg); border-radius: 16px; margin-bottom: 20px;}
+        .spinner { width: 40px; height: 40px; border: 4px solid #f1f5f9; border-top: 4px solid var(--primary-color); border-radius: 50%; margin: 0 auto 15px; animation: spin 1s linear infinite; }
 
-        @keyframes spin {
-            0% { transform: rotate(0deg); }
-            100% { transform: rotate(360deg); }
-        }
+        @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(15px); } to { opacity: 1; transform: translateY(0); } }
 
-        @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(20px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
-
-        /* Footer */
-        .footer {
-            text-align: center;
-            padding: 15px;
-            font-size: 12px;
-            color: #9ca3af;
-            background-color: #f9fafb;
-        }
+        .footer { text-align: center; padding: 20px; font-size: 13px; color: #94a3b8; font-weight: 500; }
     </style>
 </head>
 <body>
 
     <div class="container">
-        <div class="header">
-            <h1>Hari Ini</h1>
+        <div class="header-card">
+            <h1>Target Harian Yanoshi</h1>
             <div class="date" id="currentDate">-</div>
-            <div class="deadline-badge" id="closingCountdown">
-                Menghitung hari...
+            <div class="deadline-badge" id="closingCountdown">Menghitung hari...</div>
+            
+            <div class="total-summary" id="totalSummary" style="display: none;">
+                <p>Total Pencapaian Keseluruhan</p>
+                <div class="total-numbers">
+                    <strong id="grandTercapai">0</strong> / <span id="grandTarget">0</span> pcs
+                </div>
             </div>
         </div>
 
-        <div class="content">
-            <div id="loading">
-                <div class="spinner"></div>
-                <p>Tunggu Sebentar</p>
-            </div>
-
-            <div id="error" style="display: none;">
-                <p>Gagal memuat data. <br> <small>Cek koneksi internet atau script URL.</small></p>
-            </div>
-
-            <ul class="item-list" id="dataList" style="display: none;">
-                </ul>
+        <div id="loading">
+            <div class="spinner"></div>
+            <p>Mengambil Data...</p>
         </div>
+
+        <div id="error" style="display: none;">
+            <p>Gagal memuat data. <br> <small>Cek koneksi internet.</small></p>
+        </div>
+
+        <ul class="item-list" id="dataList" style="display: none;"></ul>
         
-        <div class="footer">
-            Ayo semangat terus!
-        </div>
+        <div class="footer">Ayo semangat terus! Tim Yanoshi Pasti Bisa 🔥</div>
     </div>
 
     <script>
         // --- KONFIGURASI ---
-        // JANGAN LUPA GANTI URL INI LAGI SESUAI URL SCRIPT ANDA
         const CONST_GAS_URL = "https://script.google.com/macros/s/AKfycbzzWyRgZ2fk5NLCPyAViYHF6qyliNfi86ZsbqVHOsAIv3PcKFOK9-eq-4RrjVTkIw0I/exec"; 
 
         // Fungsi Update Tanggal & Deadline
         function updateDateAndDeadline() {
             const now = new Date();
-            
-            // 1. Set Tanggal Hari Ini
             const options = { weekday: 'long', day: 'numeric', month: 'long', year: 'numeric' };
-            const formattedDate = now.toLocaleDateString('id-ID', options);
-            document.getElementById('currentDate').innerText = formattedDate;
+            document.getElementById('currentDate').innerText = now.toLocaleDateString('id-ID', options);
 
-            // 2. Hitung Sisa Hari sampai Akhir Bulan
-            // Mendapatkan tahun dan bulan saat ini
             const year = now.getFullYear();
             const month = now.getMonth();
-            
-            // Mendapatkan tanggal terakhir bulan ini (hari ke-0 bulan berikutnya = hari terakhir bulan ini)
             const lastDayOfMonth = new Date(year, month + 1, 0).getDate();
             const currentDay = now.getDate();
-            
             const remainingDays = lastDayOfMonth - currentDay;
 
-            // Update Text Reminder
             const countdownEl = document.getElementById('closingCountdown');
             if (remainingDays > 0) {
-                countdownEl.innerText = `Tinggal ${remainingDays} hari lagi sampai tanggal closing`;
+                countdownEl.innerText = `Tinggal ${remainingDays} hari menuju closing!`;
             } else if (remainingDays === 0) {
-                countdownEl.innerText = `Hari ini adalah tanggal closing!`;
-                countdownEl.style.backgroundColor = "rgba(239, 68, 68, 0.4)"; // Ubah jadi merah jika hari H
+                countdownEl.innerText = `Hari ini adalah tanggal closing! 🚀`;
+                countdownEl.style.backgroundColor = "rgba(239, 68, 68, 0.4)"; 
             } else {
-                // Jaga-jaga error logika
                 countdownEl.style.display = 'none'; 
             }
         }
@@ -262,6 +266,15 @@
                     renderList(data.items);
                     loadingEl.style.display = 'none';
                     listEl.style.display = 'block';
+                    
+                    // Trigger animasi progress bar setelah render
+                    setTimeout(() => {
+                        const bars = document.querySelectorAll('.progress-bar');
+                        bars.forEach(bar => {
+                            bar.style.width = bar.getAttribute('data-width');
+                        });
+                    }, 50);
+
                 } else {
                     throw new Error(data.message);
                 }
@@ -272,58 +285,90 @@
             }
         }
 
-        // Fungsi Render List (DIPERBARUI)
+        // Fungsi Render List Dinamis & Hitung Grand Total
         function renderList(items) {
             const listEl = document.getElementById('dataList');
             listEl.innerHTML = ''; 
 
+            // Variabel penampung untuk hitung grand total
+            let grandTotalTarget = 0;
+            let grandTotalTercapai = 0;
+
             items.forEach(item => {
                 const li = document.createElement('li');
-                li.className = 'item';
+                li.className = 'item-card';
                 
-                let htmlContent = '';
+                // Kalkulasi Logika Target Item
+                const target = parseInt(item.target) || 0;
+                let kekurangan = parseInt(item.val) || 0;
+                
+                if (kekurangan < 0) kekurangan = 0; 
+                let tercapai = target - kekurangan;
+                if (tercapai < 0) tercapai = 0;
 
-                // --- LOGIKA BARU ---
-                // Jika nilai <= 0, tampilkan "sudah capai target" + Ceklis
-                if (item.val <= 0) {
-                    htmlContent = `
-                        <span class="item-text">
-                            <b>${capitalizeFirstLetter(item.label)}</b> 
-                            <span class="target-reached-badge">
-                                sudah capai target &#10003;
-                            </span>
-                        </span>
-                    `;
-                } 
-                // Jika nilai > 0, tampilkan "masih kurang X pcs"
-                else {
-                    htmlContent = `
-                        <span class="item-text">
-                            <b>${capitalizeFirstLetter(item.label)}</b> masih kurang 
-                            <span class="highlight-number">${item.val}</span> pcs lagi
-                        </span>
-                    `;
+                // Tambahkan ke Grand Total Keseluruhan
+                grandTotalTarget += target;
+                grandTotalTercapai += tercapai;
+
+                // Kalkulasi Persentase Bar
+                let percentage = 0;
+                if (target > 0) {
+                    percentage = (tercapai / target) * 100;
                 }
+                if (percentage > 100) percentage = 100;
+
+                // Styling Berdasarkan Persentase
+                let barColor = 'linear-gradient(90deg, #3b82f6, #2563eb)';
+                let statusClass = 'status-warning';
+                let statusText = 'On Progress';
+
+                if (percentage === 100 || kekurangan === 0) {
+                    barColor = 'linear-gradient(90deg, #10b981, #059669)';
+                    statusClass = 'status-success';
+                    statusText = 'Tercapai &#10003;';
+                    percentage = 100; 
+                } else if (percentage < 30) {
+                    barColor = 'linear-gradient(90deg, #ef4444, #dc2626)';
+                    statusClass = 'status-danger';
+                    statusText = 'Perlu Dikejar';
+                }
+
+                const htmlContent = `
+                    <div class="item-header">
+                        <span class="item-title">${capitalizeFirstLetter(item.label)}</span>
+                        <span class="status-badge ${statusClass}">${statusText}</span>
+                    </div>
+
+                    <div class="progress-container">
+                        <div class="progress-bar" data-width="${percentage}%" style="background: ${barColor};"></div>
+                    </div>
+
+                    <div class="stats-row">
+                        <span>Target:<span class="stat-val">${target}</span></span>
+                        <span>Terjual:<span class="stat-val val-green">${tercapai}</span></span>
+                        <span>Kurang:<span class="stat-val ${kekurangan > 0 ? 'val-red' : ''}">${kekurangan}</span></span>
+                    </div>
+                `;
                 
                 li.innerHTML = htmlContent;
                 listEl.appendChild(li);
             });
+
+            // Update UI Ringkasan Total
+            document.getElementById('grandTercapai').innerText = grandTotalTercapai;
+            document.getElementById('grandTarget').innerText = grandTotalTarget;
+            document.getElementById('totalSummary').style.display = 'block'; // Tampilkan kotak total
         }
 
         function capitalizeFirstLetter(string) {
             if (!string) return "";
-            return string.charAt(0).toUpperCase() + string.slice(1);
+            return string.split(' ').map(word => word.charAt(0).toUpperCase() + word.slice(1)).join(' ');
         }
 
         // Inisialisasi
         document.addEventListener('DOMContentLoaded', () => {
-            updateDateAndDeadline(); // Panggil fungsi tanggal baru
-            
-            if (CONST_GAS_URL === "TEMPEL_URL_SCRIPT_ANDA_DISINI") {
-                alert("Harap ganti CONST_GAS_URL di dalam kode HTML dengan URL App Script Anda!");
-            } else {
-                fetchData();
-            }
+            updateDateAndDeadline(); 
+            fetchData();
         });
     </script>
 </body>
