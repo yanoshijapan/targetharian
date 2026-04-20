@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Target Harian Yanoshi</title>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
     
     <style>
         :root {
@@ -76,38 +76,56 @@
             font-weight: 500;
             backdrop-filter: blur(8px);
             border: 1px solid rgba(255, 255, 255, 0.2);
-            margin-bottom: 15px;
+            margin-bottom: 20px;
         }
 
-        /* Styling Ringkasan Total */
+        /* Ringkasan Total */
         .total-summary {
             background-color: rgba(0, 0, 0, 0.15);
-            padding: 15px;
-            border-radius: 12px;
-            border: 1px solid rgba(255, 255, 255, 0.1);
+            padding: 18px 20px;
+            border-radius: 16px;
+            border: 1px solid rgba(255, 255, 255, 0.15);
             animation: fadeIn 0.5s ease-out;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            text-align: left;
         }
 
-        .total-summary p {
-            font-size: 12px;
+        .total-info p {
+            font-size: 11px;
             text-transform: uppercase;
             letter-spacing: 1px;
-            opacity: 0.8;
+            opacity: 0.85;
             margin-bottom: 5px;
         }
 
-        .total-summary .total-numbers {
-            font-size: 20px;
+        .total-numbers {
+            font-size: 18px;
             font-weight: 400;
         }
 
-        .total-summary .total-numbers strong {
+        .total-numbers strong {
             font-size: 28px;
             font-weight: 700;
-            color: #d1fae5; /* Warna hijau terang untuk yang tercapai */
+            color: #d1fae5; 
         }
 
-        /* Modern Item Cards */
+        /* Badge Persentase Grand Total Dinamis */
+        .total-percentage-badge {
+            background: rgba(255, 255, 255, 0.2);
+            padding: 10px 16px;
+            border-radius: 12px;
+            font-size: 22px;
+            font-weight: 800;
+            color: #ffffff;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+            backdrop-filter: blur(5px);
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            transition: all 0.5s ease;
+        }
+
+        /* Item Cards */
         .item-list { list-style: none; }
 
         .item-card {
@@ -132,15 +150,29 @@
             margin-bottom: 12px;
         }
 
+        .title-wrap {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            flex-wrap: wrap;
+        }
+
         .item-title {
             font-size: 16px;
             font-weight: 700;
             color: var(--text-main);
         }
 
-        /* Status Badge */
+        .item-percentage {
+            font-size: 22px;
+            font-weight: 800;
+        }
+        .perc-success { color: var(--accent-green); }
+        .perc-warning { color: var(--accent-orange); }
+        .perc-danger { color: var(--accent-red); }
+
         .status-badge {
-            font-size: 12px;
+            font-size: 11px;
             font-weight: 700;
             padding: 4px 10px;
             border-radius: 20px;
@@ -152,7 +184,6 @@
         .status-warning { background-color: #fef3c7; color: var(--accent-orange); border: 1px solid rgba(245, 158, 11, 0.3); }
         .status-danger { background-color: #fee2e2; color: var(--accent-red); border: 1px solid rgba(239, 68, 68, 0.3); }
 
-        /* Progress Bar */
         .progress-container {
             width: 100%;
             height: 10px;
@@ -169,7 +200,6 @@
             transition: width 1s cubic-bezier(0.4, 0, 0.2, 1);
         }
 
-        /* Stats Row */
         .stats-row {
             display: flex;
             justify-content: space-between;
@@ -185,7 +215,6 @@
         .val-green { color: var(--accent-green); }
         .val-red { color: var(--accent-red); }
 
-        /* Loading & Error States */
         #loading, #error { text-align: center; padding: 40px 0; color: var(--text-muted); background: var(--card-bg); border-radius: 16px; margin-bottom: 20px;}
         .spinner { width: 40px; height: 40px; border: 4px solid #f1f5f9; border-top: 4px solid var(--primary-color); border-radius: 50%; margin: 0 auto 15px; animation: spin 1s linear infinite; }
 
@@ -204,16 +233,19 @@
             <div class="deadline-badge" id="closingCountdown">Menghitung hari...</div>
             
             <div class="total-summary" id="totalSummary" style="display: none;">
-                <p>Total Pencapaian Keseluruhan</p>
-                <div class="total-numbers">
-                    <strong id="grandTercapai">0</strong> / <span id="grandTarget">0</span> pcs
+                <div class="total-info">
+                    <p>Pencapaian Keseluruhan</p>
+                    <div class="total-numbers">
+                        <strong id="grandTercapai">0</strong> / <span id="grandTarget">0</span> pcs
+                    </div>
                 </div>
+                <div class="total-percentage-badge" id="grandPercentage">0%</div>
             </div>
         </div>
 
         <div id="loading">
             <div class="spinner"></div>
-            <p>Mengambil Data...</p>
+            <p>Tunggu Sebentar...</p>
         </div>
 
         <div id="error" style="display: none;">
@@ -226,10 +258,8 @@
     </div>
 
     <script>
-        // --- KONFIGURASI ---
         const CONST_GAS_URL = "https://script.google.com/macros/s/AKfycbzzWyRgZ2fk5NLCPyAViYHF6qyliNfi86ZsbqVHOsAIv3PcKFOK9-eq-4RrjVTkIw0I/exec"; 
 
-        // Fungsi Update Tanggal & Deadline
         function updateDateAndDeadline() {
             const now = new Date();
             const options = { weekday: 'long', day: 'numeric', month: 'long', year: 'numeric' };
@@ -252,7 +282,6 @@
             }
         }
 
-        // Fungsi Fetch Data
         async function fetchData() {
             const loadingEl = document.getElementById('loading');
             const listEl = document.getElementById('dataList');
@@ -267,7 +296,6 @@
                     loadingEl.style.display = 'none';
                     listEl.style.display = 'block';
                     
-                    // Trigger animasi progress bar setelah render
                     setTimeout(() => {
                         const bars = document.querySelectorAll('.progress-bar');
                         bars.forEach(bar => {
@@ -285,12 +313,10 @@
             }
         }
 
-        // Fungsi Render List Dinamis & Hitung Grand Total
         function renderList(items) {
             const listEl = document.getElementById('dataList');
             listEl.innerHTML = ''; 
 
-            // Variabel penampung untuk hitung grand total
             let grandTotalTarget = 0;
             let grandTotalTercapai = 0;
 
@@ -298,7 +324,6 @@
                 const li = document.createElement('li');
                 li.className = 'item-card';
                 
-                // Kalkulasi Logika Target Item
                 const target = parseInt(item.target) || 0;
                 let kekurangan = parseInt(item.val) || 0;
                 
@@ -306,37 +331,44 @@
                 let tercapai = target - kekurangan;
                 if (tercapai < 0) tercapai = 0;
 
-                // Tambahkan ke Grand Total Keseluruhan
                 grandTotalTarget += target;
                 grandTotalTercapai += tercapai;
 
-                // Kalkulasi Persentase Bar
                 let percentage = 0;
                 if (target > 0) {
                     percentage = (tercapai / target) * 100;
                 }
                 if (percentage > 100) percentage = 100;
 
-                // Styling Berdasarkan Persentase
-                let barColor = 'linear-gradient(90deg, #3b82f6, #2563eb)';
+                // --- LOGIKA PEWARNAAN BARU (MASTER IT) ---
+                let barColor = 'linear-gradient(90deg, #3b82f6, #2563eb)'; // Default Biru (30-49%)
                 let statusClass = 'status-warning';
                 let statusText = 'On Progress';
+                let percClass = 'perc-warning';
 
-                if (percentage === 100 || kekurangan === 0) {
+                if (percentage >= 50 || kekurangan === 0) {
+                    // Berubah Hijau jika >= 50%
                     barColor = 'linear-gradient(90deg, #10b981, #059669)';
                     statusClass = 'status-success';
-                    statusText = 'Tercapai &#10003;';
-                    percentage = 100; 
+                    statusText = (percentage >= 100 || kekurangan === 0) ? 'Tercapai &#10003;' : 'Progress Baik';
+                    percClass = 'perc-success';
                 } else if (percentage < 30) {
+                    // Tetap Merah jika di bawah 30%
                     barColor = 'linear-gradient(90deg, #ef4444, #dc2626)';
                     statusClass = 'status-danger';
                     statusText = 'Perlu Dikejar';
+                    percClass = 'perc-danger';
                 }
+
+                const formattedPercentage = Math.round(percentage) + '%';
 
                 const htmlContent = `
                     <div class="item-header">
-                        <span class="item-title">${capitalizeFirstLetter(item.label)}</span>
-                        <span class="status-badge ${statusClass}">${statusText}</span>
+                        <div class="title-wrap">
+                            <span class="item-title">${capitalizeFirstLetter(item.label)}</span>
+                            <span class="status-badge ${statusClass}">${statusText}</span>
+                        </div>
+                        <span class="item-percentage ${percClass}">${formattedPercentage}</span>
                     </div>
 
                     <div class="progress-container">
@@ -354,10 +386,32 @@
                 listEl.appendChild(li);
             });
 
-            // Update UI Ringkasan Total
+            // Kalkulasi Grand Percentage
+            let grandPercentage = 0;
+            if (grandTotalTarget > 0) {
+                grandPercentage = Math.round((grandTotalTercapai / grandTotalTarget) * 100);
+            }
+            if (grandPercentage > 100) grandPercentage = 100;
+
+            // Update UI Ringkasan Total & Warna Badge Header
+            const grandPercentageEl = document.getElementById('grandPercentage');
+            grandPercentageEl.innerText = grandPercentage + '%';
+            
+            // Logic warna dinamis untuk badge persentase besar
+            if (grandPercentage >= 50) {
+                grandPercentageEl.style.backgroundColor = "rgba(16, 185, 129, 0.4)"; // Soft Green
+                grandPercentageEl.style.borderColor = "rgba(16, 185, 129, 0.6)";
+            } else if (grandPercentage < 30) {
+                grandPercentageEl.style.backgroundColor = "rgba(239, 68, 68, 0.4)"; // Soft Red
+                grandPercentageEl.style.borderColor = "rgba(239, 68, 68, 0.6)";
+            } else {
+                grandPercentageEl.style.backgroundColor = "rgba(255, 255, 255, 0.2)"; // Default Glass
+                grandPercentageEl.style.borderColor = "rgba(255, 255, 255, 0.3)";
+            }
+
             document.getElementById('grandTercapai').innerText = grandTotalTercapai;
             document.getElementById('grandTarget').innerText = grandTotalTarget;
-            document.getElementById('totalSummary').style.display = 'block'; // Tampilkan kotak total
+            document.getElementById('totalSummary').style.display = 'flex'; 
         }
 
         function capitalizeFirstLetter(string) {
@@ -365,7 +419,6 @@
             return string.split(' ').map(word => word.charAt(0).toUpperCase() + word.slice(1)).join(' ');
         }
 
-        // Inisialisasi
         document.addEventListener('DOMContentLoaded', () => {
             updateDateAndDeadline(); 
             fetchData();
