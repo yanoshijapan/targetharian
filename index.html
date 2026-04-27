@@ -5,7 +5,6 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Target Harian Yanoshi</title>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
-    
     <style>
         :root {
             --primary-color: #3b82f6;
@@ -13,15 +12,13 @@
             --card-bg: #ffffff;
             --text-main: #1e293b;
             --text-muted: #64748b;
-            --accent-red: #ef4444; 
-            --accent-green: #10b981; 
+            --accent-red: #ef4444;
+            --accent-green: #10b981;
             --accent-orange: #f59e0b;
-            --shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.05), 0 4px 6px -2px rgba(0, 0, 0, 0.025);
+            --shadow: 0 10px 15px -3px rgba(0,0,0,0.05), 0 4px 6px -2px rgba(0,0,0,0.025);
             --radius: 20px;
         }
-
         * { box-sizing: border-box; margin: 0; padding: 0; }
-
         body {
             font-family: 'Inter', sans-serif;
             background-color: var(--bg-color);
@@ -32,397 +29,666 @@
             align-items: flex-start;
             padding: 20px;
         }
+        .container { width: 100%; max-width: 500px; background: transparent; margin-top: 10px; animation: fadeIn 0.8s ease-out; }
 
-        .container {
-            width: 100%;
-            max-width: 500px; 
-            background: transparent;
-            margin-top: 10px;
-            animation: fadeIn 0.8s ease-out;
-        }
-
-        /* Header Card */
+        /* ── Header ── */
         .header-card {
             background: linear-gradient(135deg, #1e3a8a 0%, #3b82f6 100%);
-            padding: 30px 24px;
-            color: white;
-            text-align: center;
-            border-radius: var(--radius);
-            box-shadow: var(--shadow);
-            margin-bottom: 20px;
+            padding: 30px 24px; color: white; text-align: center;
+            border-radius: var(--radius); box-shadow: var(--shadow); margin-bottom: 20px;
         }
-
-        .header-card h1 {
-            font-size: 13px;
-            text-transform: uppercase;
-            letter-spacing: 2px;
-            opacity: 0.9;
-            margin-bottom: 8px;
-            font-weight: 600;
-        }
-
-        .header-card .date {
-            font-size: 26px;
-            font-weight: 700;
-            margin-bottom: 15px;
-        }
-
+        .header-card h1 { font-size: 13px; text-transform: uppercase; letter-spacing: 2px; opacity: .9; margin-bottom: 8px; font-weight: 600; }
+        .header-card .date { font-size: 26px; font-weight: 700; margin-bottom: 15px; }
         .deadline-badge {
-            display: inline-block;
-            background-color: rgba(255, 255, 255, 0.2);
-            padding: 8px 16px;
-            border-radius: 30px;
-            font-size: 13px;
-            font-weight: 500;
-            backdrop-filter: blur(8px);
-            border: 1px solid rgba(255, 255, 255, 0.2);
-            margin-bottom: 20px;
+            display: inline-block; background-color: rgba(255,255,255,.2); padding: 8px 16px;
+            border-radius: 30px; font-size: 13px; font-weight: 500; backdrop-filter: blur(8px);
+            border: 1px solid rgba(255,255,255,.2); margin-bottom: 20px;
         }
-
-        /* Ringkasan Total */
         .total-summary {
-            background-color: rgba(0, 0, 0, 0.15);
-            padding: 18px 20px;
-            border-radius: 16px;
-            border: 1px solid rgba(255, 255, 255, 0.15);
-            animation: fadeIn 0.5s ease-out;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            text-align: left;
+            background-color: rgba(0,0,0,.15); padding: 18px 20px; border-radius: 16px;
+            border: 1px solid rgba(255,255,255,.15); display: flex;
+            justify-content: space-between; align-items: center; text-align: left;
         }
-
-        .total-info p {
-            font-size: 11px;
-            text-transform: uppercase;
-            letter-spacing: 1px;
-            opacity: 0.85;
-            margin-bottom: 5px;
-        }
-
-        .total-numbers {
-            font-size: 18px;
-            font-weight: 400;
-        }
-
-        .total-numbers strong {
-            font-size: 28px;
-            font-weight: 700;
-            color: #d1fae5; 
-        }
-
-        /* Badge Persentase Grand Total Dinamis */
+        .total-info p { font-size: 11px; text-transform: uppercase; letter-spacing: 1px; opacity: .85; margin-bottom: 5px; }
+        .total-numbers { font-size: 18px; font-weight: 400; }
+        .total-numbers strong { font-size: 28px; font-weight: 700; color: #d1fae5; }
         .total-percentage-badge {
-            background: rgba(255, 255, 255, 0.2);
-            padding: 10px 16px;
-            border-radius: 12px;
-            font-size: 22px;
-            font-weight: 800;
-            color: #ffffff;
-            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
-            backdrop-filter: blur(5px);
-            border: 1px solid rgba(255, 255, 255, 0.3);
-            transition: all 0.5s ease;
+            background: rgba(255,255,255,.2); padding: 10px 16px; border-radius: 12px;
+            font-size: 22px; font-weight: 800; color: #fff;
+            box-shadow: 0 4px 6px rgba(0,0,0,.1); backdrop-filter: blur(5px);
+            border: 1px solid rgba(255,255,255,.3); transition: all .5s ease;
         }
 
-        /* Item Cards */
+        /* ── Item Cards ── */
         .item-list { list-style: none; }
-
         .item-card {
-            background: var(--card-bg);
-            padding: 20px;
-            border-radius: 16px;
-            margin-bottom: 16px;
-            box-shadow: var(--shadow);
-            border: 1px solid #e2e8f0;
-            transition: transform 0.2s ease, box-shadow 0.2s ease;
+            background: var(--card-bg); padding: 20px; border-radius: 16px;
+            margin-bottom: 16px; box-shadow: var(--shadow); border: 1px solid #e2e8f0;
+            transition: transform .2s ease, box-shadow .2s ease;
         }
-
-        .item-card:hover {
-            transform: translateY(-3px);
-            box-shadow: 0 15px 25px -5px rgba(0, 0, 0, 0.1);
-        }
-
-        .item-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 12px;
-        }
-
-        .title-wrap {
-            display: flex;
-            align-items: center;
-            gap: 10px;
-            flex-wrap: wrap;
-        }
-
-        .item-title {
-            font-size: 16px;
-            font-weight: 700;
-            color: var(--text-main);
-        }
-
-        .item-percentage {
-            font-size: 22px;
-            font-weight: 800;
-        }
+        .item-card:hover { transform: translateY(-3px); box-shadow: 0 15px 25px -5px rgba(0,0,0,.1); }
+        .item-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px; }
+        .title-wrap { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; }
+        .item-title { font-size: 16px; font-weight: 700; color: var(--text-main); }
+        .item-percentage { font-size: 22px; font-weight: 800; }
         .perc-success { color: var(--accent-green); }
         .perc-warning { color: var(--accent-orange); }
-        .perc-danger { color: var(--accent-red); }
-
-        .status-badge {
-            font-size: 11px;
-            font-weight: 700;
-            padding: 4px 10px;
-            border-radius: 20px;
-            display: inline-flex;
-            align-items: center;
-            gap: 4px;
-        }
-        .status-success { background-color: #d1fae5; color: var(--accent-green); border: 1px solid rgba(16, 185, 129, 0.3); }
-        .status-warning { background-color: #fef3c7; color: var(--accent-orange); border: 1px solid rgba(245, 158, 11, 0.3); }
-        .status-danger { background-color: #fee2e2; color: var(--accent-red); border: 1px solid rgba(239, 68, 68, 0.3); }
-
-        .progress-container {
-            width: 100%;
-            height: 10px;
-            background-color: #e2e8f0;
-            border-radius: 10px;
-            overflow: hidden;
-            margin-bottom: 12px;
-        }
-
-        .progress-bar {
-            height: 100%;
-            border-radius: 10px;
-            width: 0%; 
-            transition: width 1s cubic-bezier(0.4, 0, 0.2, 1);
-        }
-
-        .stats-row {
-            display: flex;
-            justify-content: space-between;
-            font-size: 13px;
-            color: var(--text-muted);
-            font-weight: 500;
-            background: #f8fafc;
-            padding: 10px 12px;
-            border-radius: 10px;
-        }
-
+        .perc-danger  { color: var(--accent-red); }
+        .status-badge { font-size: 11px; font-weight: 700; padding: 4px 10px; border-radius: 20px; display: inline-flex; align-items: center; gap: 4px; }
+        .status-success { background-color: #d1fae5; color: var(--accent-green); border: 1px solid rgba(16,185,129,.3); }
+        .status-warning { background-color: #fef3c7; color: var(--accent-orange); border: 1px solid rgba(245,158,11,.3); }
+        .status-danger  { background-color: #fee2e2; color: var(--accent-red);    border: 1px solid rgba(239,68,68,.3); }
+        .progress-container { width: 100%; height: 10px; background-color: #e2e8f0; border-radius: 10px; overflow: hidden; margin-bottom: 12px; }
+        .progress-bar { height: 100%; border-radius: 10px; width: 0%; transition: width 1s cubic-bezier(.4,0,.2,1); }
+        .stats-row { display: flex; justify-content: space-between; font-size: 13px; color: var(--text-muted); font-weight: 500; background: #f8fafc; padding: 10px 12px; border-radius: 10px; }
         .stat-val { font-weight: 700; color: var(--text-main); margin-left: 4px; }
         .val-green { color: var(--accent-green); }
-        .val-red { color: var(--accent-red); }
+        .val-red   { color: var(--accent-red); }
 
-        #loading, #error { text-align: center; padding: 40px 0; color: var(--text-muted); background: var(--card-bg); border-radius: 16px; margin-bottom: 20px;}
+        #loading, #error { text-align: center; padding: 40px; background: var(--card-bg); border-radius: var(--radius); box-shadow: var(--shadow); }
         .spinner { width: 40px; height: 40px; border: 4px solid #f1f5f9; border-top: 4px solid var(--primary-color); border-radius: 50%; margin: 0 auto 15px; animation: spin 1s linear infinite; }
-
-        @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
-        @keyframes fadeIn { from { opacity: 0; transform: translateY(15px); } to { opacity: 1; transform: translateY(0); } }
-
+        @keyframes spin    { to { transform: rotate(360deg); } }
+        @keyframes fadeIn  { from { opacity: 0; transform: translateY(15px); } to { opacity: 1; transform: translateY(0); } }
+        @keyframes fadeOut { to { opacity: 0; transform: translateX(-50%) translateY(-10px); } }
         .footer { text-align: center; padding: 20px; font-size: 13px; color: #94a3b8; font-weight: 500; }
+
+        /* ── AUTO REKAP TOAST ── */
+        .auto-rekap-toast {
+            position: fixed; top: 16px; left: 50%; transform: translateX(-50%);
+            background: linear-gradient(135deg,#059669,#10b981); color: #fff;
+            padding: 12px 22px; border-radius: 14px; font-size: 13px; font-weight: 700;
+            box-shadow: 0 8px 20px rgba(0,0,0,.18); z-index: 9999;
+            display: flex; align-items: center; gap: 8px; max-width: 90%;
+            animation: fadeIn .4s ease;
+        }
+        .auto-rekap-toast.hide { animation: fadeOut .4s ease forwards; }
+
+        /* =============================================
+           REKAP SECTION
+        ============================================= */
+        .rekap-section {
+            background: var(--card-bg); border-radius: var(--radius);
+            box-shadow: var(--shadow); border: 1px solid #e2e8f0;
+            margin-bottom: 20px; overflow: hidden; animation: fadeIn .6s ease-out;
+        }
+        .rekap-header {
+            background: linear-gradient(135deg,#0f172a 0%,#1e3a8a 100%);
+            padding: 18px 22px; display: flex; justify-content: space-between;
+            align-items: center; cursor: pointer; user-select: none;
+        }
+        .rekap-header-left { display: flex; align-items: center; gap: 10px; }
+        .rekap-icon { font-size: 20px; }
+        .rekap-title { color: white; font-size: 14px; font-weight: 700; letter-spacing: .5px; }
+        .rekap-subtitle { color: rgba(255,255,255,.65); font-size: 11px; margin-top: 2px; }
+        .rekap-toggle-btn {
+            background: rgba(255,255,255,.15); border: 1px solid rgba(255,255,255,.25);
+            color: white; border-radius: 8px; padding: 6px 12px; font-size: 12px;
+            font-weight: 600; cursor: pointer; transition: background .2s; white-space: nowrap;
+        }
+        .rekap-toggle-btn:hover { background: rgba(255,255,255,.25); }
+        .rekap-body { padding: 0 22px 22px; display: none; }
+        .rekap-body.open { display: block; }
+
+        .rekap-actions { padding: 14px 0 8px; display: flex; gap: 10px; flex-wrap: wrap; }
+        .btn-simpan-rekap {
+            background: linear-gradient(135deg,#10b981,#059669); color: white;
+            border: none; border-radius: 10px; padding: 10px 16px; font-size: 13px;
+            font-weight: 700; cursor: pointer; transition: opacity .2s, transform .1s;
+            display: flex; align-items: center; gap: 6px;
+        }
+        .btn-simpan-rekap:hover { opacity: .9; transform: translateY(-1px); }
+        .btn-hapus-semua {
+            background: #fff; color: var(--accent-red); border: 1.5px solid #fca5a5;
+            border-radius: 10px; padding: 10px 14px; font-size: 13px; font-weight: 700;
+            cursor: pointer; transition: background .2s;
+        }
+        .btn-hapus-semua:hover { background: #fee2e2; }
+
+        .rekap-filter { display: flex; align-items: center; gap: 10px; padding: 8px 0 14px; flex-wrap: wrap; }
+        .rekap-filter label { font-size: 12px; font-weight: 600; color: var(--text-muted); text-transform: uppercase; letter-spacing: .5px; }
+        .rekap-filter select {
+            border: 1.5px solid #e2e8f0; border-radius: 8px; padding: 7px 12px;
+            font-size: 13px; font-weight: 600; color: var(--text-main);
+            background: #f8fafc; cursor: pointer; outline: none; transition: border-color .2s;
+        }
+        .rekap-filter select:focus { border-color: var(--primary-color); }
+
+        .rekap-empty { text-align: center; padding: 30px 20px; color: var(--text-muted); font-size: 13px; }
+        .rekap-empty .empty-icon { font-size: 32px; margin-bottom: 8px; }
+
+        /* ── Rekap Card per Bulan ── */
+        .rekap-month-card {
+            border: 1px solid #e2e8f0; border-radius: 14px;
+            margin-bottom: 12px; overflow: hidden;
+        }
+        .rekap-month-header {
+            background: #f8fafc; padding: 12px 16px;
+            display: flex; justify-content: space-between; align-items: center;
+            cursor: pointer; user-select: none; border-bottom: 1px solid transparent;
+            transition: background .15s;
+        }
+        .rekap-month-header:hover { background: #f1f5f9; }
+        .rekap-month-header.detail-open { border-bottom-color: #e2e8f0; }
+        .rekap-month-title { font-size: 14px; font-weight: 800; color: var(--text-main); display:flex; align-items:center; flex-wrap:wrap; gap:6px; }
+        .rekap-month-meta  { font-size: 11px; color: var(--text-muted); margin-top: 3px; }
+        .rekap-month-right { display: flex; align-items: center; gap: 8px; flex-shrink:0; }
+
+        .rekap-perc-badge { display: inline-block; padding: 4px 11px; border-radius: 20px; font-size: 13px; font-weight: 800; }
+        .rekap-perc-green  { background: #d1fae5; color: #059669; }
+        .rekap-perc-orange { background: #fef3c7; color: #d97706; }
+        .rekap-perc-red    { background: #fee2e2; color: #dc2626; }
+
+        .btn-del-month {
+            background: none; border: none; color: #fca5a5;
+            cursor: pointer; font-size: 15px; padding: 2px 6px;
+            border-radius: 6px; transition: color .2s; line-height: 1;
+        }
+        .btn-del-month:hover { color: var(--accent-red); }
+
+        /* Detail produk dalam rekap */
+        .rekap-detail { display: none; padding: 14px 16px 16px; }
+        .rekap-detail.open { display: block; }
+
+        /* Grand total card */
+        .rekap-grand-row {
+            display: flex; justify-content: space-between; align-items: center;
+            background: linear-gradient(135deg,#1e3a8a,#3b82f6);
+            border-radius: 12px; padding: 12px 16px; margin-bottom: 12px; color: white;
+            gap: 8px; flex-wrap: wrap;
+        }
+        .rg-label { font-size: 11px; font-weight: 600; opacity: .8; margin-bottom: 3px; }
+        .rg-val   { font-size: 20px; font-weight: 800; }
+        .rg-pcs   { font-size: 12px; font-weight: 400; opacity: .75; }
+
+        /* Tabel produk */
+        .section-label { font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: .5px; color: var(--text-muted); margin: 10px 0 7px; }
+        .prod-table-wrap { border-radius: 10px; overflow: hidden; border: 1px solid #e2e8f0; }
+        .prod-table { width: 100%; border-collapse: collapse; font-size: 12px; }
+        .prod-table thead tr { background: #f1f5f9; }
+        .prod-table thead th {
+            padding: 8px 10px; font-size: 10px; font-weight: 700;
+            text-transform: uppercase; letter-spacing: .5px;
+            color: var(--text-muted); border-bottom: 1px solid #e2e8f0; text-align:left;
+        }
+        .prod-table thead th:not(:first-child) { text-align: right; }
+        .prod-table tbody tr { border-bottom: 1px solid #f1f5f9; }
+        .prod-table tbody tr:last-child { border-bottom: none; }
+        .prod-table tbody tr:hover { background: #f8fafc; }
+        .prod-table tbody td { padding: 9px 10px; font-weight: 500; color: var(--text-main); }
+        .prod-table tbody td:not(:first-child) { text-align: right; }
+        .prod-terjual { color: var(--accent-green); font-weight: 700; }
+        .prod-kurang  { color: var(--accent-red);   font-weight: 700; }
+
+        /* Mini progress */
+        .mini-bar-wrap { width: 52px; height: 6px; background: #e2e8f0; border-radius: 6px; overflow: hidden; display: inline-block; vertical-align: middle; margin-right: 4px; }
+        .mini-bar      { height: 100%; border-radius: 6px; }
+
+        /* Grand summary footer */
+        .rekap-grand-summary {
+            background: linear-gradient(135deg,#0f172a,#1e3a8a);
+            border-radius: 14px; padding: 16px 18px; color: white;
+            display: flex; justify-content: space-between; align-items: center;
+            margin-top: 4px; gap: 10px;
+        }
+        .rgs-label { font-size: 11px; text-transform: uppercase; letter-spacing: 1px; opacity: .8; margin-bottom: 4px; }
+        .rgs-val   { font-size: 22px; font-weight: 800; color: #d1fae5; }
+        .rgs-sub   { font-size: 12px; opacity: .7; }
+
+        .rekap-save-notif {
+            display: none; border-radius: 10px; padding: 10px 14px;
+            font-size: 13px; font-weight: 600; margin-top: 4px;
+            text-align: center;
+        }
+
+        .auto-info-badge {
+            display: inline-flex; align-items: center; gap: 6px;
+            background: #eff6ff; color: #1d4ed8; border: 1px solid #bfdbfe;
+            border-radius: 8px; padding: 6px 12px; font-size: 12px; font-weight: 600;
+            margin: 12px 0 4px;
+        }
+        .auto-tag {
+            font-size: 10px; background: #eff6ff; color: #1d4ed8;
+            border: 1px solid #bfdbfe; border-radius: 6px;
+            padding: 2px 7px; font-weight: 700;
+        }
+        .chevron { font-size: 12px; color: var(--text-muted); transition: transform .2s; }
+        .chevron.open { transform: rotate(180deg); }
     </style>
 </head>
 <body>
+<div class="container">
 
-    <div class="container">
-        <div class="header-card">
-            <h1>Target Harian Yanoshi</h1>
-            <div class="date" id="currentDate">-</div>
-            <div class="deadline-badge" id="closingCountdown">Menghitung hari...</div>
-            
-            <div class="total-summary" id="totalSummary" style="display: none;">
-                <div class="total-info">
-                    <p>Pencapaian Keseluruhan</p>
-                    <div class="total-numbers">
-                        <strong id="grandTercapai">0</strong> / <span id="grandTarget">0</span> pcs
-                    </div>
+    <!-- ── HEADER ── -->
+    <div class="header-card">
+        <h1>Target Harian Yanoshi</h1>
+        <div class="date" id="currentDate">-</div>
+        <div class="deadline-badge" id="closingCountdown">Menghitung hari...</div>
+        <div class="total-summary" id="totalSummary" style="display:none;">
+            <div class="total-info">
+                <p>Pencapaian Keseluruhan</p>
+                <div class="total-numbers">
+                    <strong id="grandTercapai">0</strong> / <span id="grandTarget">0</span> pcs
                 </div>
-                <div class="total-percentage-badge" id="grandPercentage">0%</div>
             </div>
+            <div class="total-percentage-badge" id="grandPercentage">0%</div>
         </div>
-
-        <div id="loading">
-            <div class="spinner"></div>
-            <p>Tunggu Sebentar...</p>
-        </div>
-
-        <div id="error" style="display: none;">
-            <p>Gagal memuat data. <br> <small>Cek koneksi internet.</small></p>
-        </div>
-
-        <ul class="item-list" id="dataList" style="display: none;"></ul>
-        
-        <div class="footer">Ayo semangat terus! Tim Yanoshi Pasti Bisa 🔥</div>
     </div>
 
-    <script>
-        const CONST_GAS_URL = "https://script.google.com/macros/s/AKfycbzzWyRgZ2fk5NLCPyAViYHF6qyliNfi86ZsbqVHOsAIv3PcKFOK9-eq-4RrjVTkIw0I/exec"; 
+    <div id="loading"><div class="spinner"></div><p>Tunggu Sebentar...</p></div>
+    <div id="error" style="display:none;"><p>Gagal memuat data.<br><small>Cek koneksi internet.</small></p></div>
 
-        function updateDateAndDeadline() {
-            const now = new Date();
-            const options = { weekday: 'long', day: 'numeric', month: 'long', year: 'numeric' };
-            document.getElementById('currentDate').innerText = now.toLocaleDateString('id-ID', options);
+    <ul class="item-list" id="dataList" style="display:none;"></ul>
 
-            const year = now.getFullYear();
-            const month = now.getMonth();
-            const lastDayOfMonth = new Date(year, month + 1, 0).getDate();
-            const currentDay = now.getDate();
-            const remainingDays = lastDayOfMonth - currentDay;
+    <!-- ── REKAP AKHIR BULAN ── -->
+    <div class="rekap-section" id="rekapSection" style="display:none;">
+        <div class="rekap-header" onclick="toggleRekap()">
+            <div class="rekap-header-left">
+                <span class="rekap-icon">📊</span>
+                <div>
+                    <div class="rekap-title">Rekap Akhir Bulan</div>
+                    <div class="rekap-subtitle">Histori pencapaian + detail produk per bulan</div>
+                </div>
+            </div>
+            <button class="rekap-toggle-btn" id="rekapToggleLabel">Lihat ▾</button>
+        </div>
 
-            const countdownEl = document.getElementById('closingCountdown');
-            if (remainingDays > 0) {
-                countdownEl.innerText = `Tinggal ${remainingDays} hari menuju closing!`;
-            } else if (remainingDays === 0) {
-                countdownEl.innerText = `Hari ini adalah tanggal closing! 🚀`;
-                countdownEl.style.backgroundColor = "rgba(239, 68, 68, 0.4)"; 
-            } else {
-                countdownEl.style.display = 'none'; 
-            }
+        <div class="rekap-body" id="rekapBody">
+            <div><span class="auto-info-badge">🤖 Auto-rekap aktif — tersimpan otomatis setiap akhir bulan</span></div>
+
+            <div class="rekap-actions">
+                <button class="btn-simpan-rekap" onclick="simpanRekapBulanIni(false)">💾 Simpan Rekap Bulan Ini</button>
+                <button class="btn-hapus-semua" onclick="hapusSemuaRekap()">🗑 Hapus Semua</button>
+            </div>
+            <div class="rekap-save-notif" id="rekapNotif"></div>
+
+            <div class="rekap-filter">
+                <label>Tampilkan:</label>
+                <select id="filterTahun" onchange="renderListRekap()">
+                    <option value="semua">Semua Tahun</option>
+                </select>
+            </div>
+
+            <div id="rekapListContainer"></div>
+        </div>
+    </div>
+
+    <div class="footer">Ayo semangat terus! Tim Yanoshi Pasti Bisa 🔥</div>
+</div>
+
+<script>
+/* ================================================================
+   CONFIG
+================================================================ */
+const CONST_GAS_URL  = "https://script.google.com/macros/s/AKfycbzzWyRgZ2fk5NLCPyAViYHF6qyliNfi86ZsbqVHOsAIv3PcKFOK9-eq-4RrjVTkIw0I/exec";
+const REKAP_KEY      = "yanoshi_rekap_v3";
+const LAST_AUTO_KEY  = "yanoshi_last_auto";
+const NAMA_BULAN     = ['Januari','Februari','Maret','April','Mei','Juni',
+                        'Juli','Agustus','September','Oktober','November','Desember'];
+
+let currentGrandTercapai = 0;
+let currentGrandTarget   = 0;
+let currentItems         = [];   // [{label, target, tercapai, kekurangan, persentase}]
+
+/* ================================================================
+   DATE & COUNTDOWN
+================================================================ */
+function updateDateAndDeadline() {
+    const now = new Date();
+    document.getElementById('currentDate').innerText =
+        now.toLocaleDateString('id-ID', { weekday:'long', day:'numeric', month:'long', year:'numeric' });
+
+    const lastDay   = new Date(now.getFullYear(), now.getMonth()+1, 0).getDate();
+    const remaining = lastDay - now.getDate();
+    const el = document.getElementById('closingCountdown');
+    if (remaining > 0)      el.innerText = `Tinggal ${remaining} hari menuju closing!`;
+    else if (remaining === 0){ el.innerText = 'Hari ini adalah tanggal closing! 🚀'; el.style.backgroundColor='rgba(239,68,68,.4)'; }
+    else                     el.style.display = 'none';
+}
+
+/* ================================================================
+   FETCH & RENDER DATA HARIAN
+================================================================ */
+async function fetchData() {
+    const loadingEl = document.getElementById('loading');
+    const listEl    = document.getElementById('dataList');
+    const errorEl   = document.getElementById('error');
+    try {
+        const res  = await fetch(CONST_GAS_URL);
+        const data = await res.json();
+        if (data.status === 'success') {
+            renderList(data.items);
+            loadingEl.style.display = 'none';
+            listEl.style.display    = 'block';
+            setTimeout(() => document.querySelectorAll('.progress-bar')
+                .forEach(b => b.style.width = b.dataset.width), 50);
+        } else { throw new Error(data.message); }
+    } catch(e) {
+        console.error(e);
+        loadingEl.style.display = 'none';
+        errorEl.style.display   = 'block';
+    }
+}
+
+function renderList(items) {
+    const listEl = document.getElementById('dataList');
+    listEl.innerHTML = '';
+    currentItems = [];
+    let gTarget = 0, gTercapai = 0;
+
+    items.forEach(item => {
+        const target     = parseInt(item.target) || 0;
+        const kekurangan = Math.max(parseInt(item.val) || 0, 0);
+        const tercapai   = Math.max(target - kekurangan, 0);
+        const pct        = target > 0 ? Math.min((tercapai/target)*100, 100) : 0;
+
+        gTarget   += target;
+        gTercapai += tercapai;
+        currentItems.push({ label: capFirst(item.label), target, tercapai, kekurangan, persentase: Math.round(pct) });
+
+        let barColor = 'linear-gradient(90deg,#3b82f6,#2563eb)';
+        let stClass  = 'status-warning', stText = 'On Progress', percCls = 'perc-warning';
+        if (pct >= 50 || kekurangan === 0) {
+            barColor = 'linear-gradient(90deg,#10b981,#059669)';
+            stClass  = 'status-success';
+            stText   = (pct >= 100 || kekurangan === 0) ? 'Tercapai &#10003;' : 'Progress Baik';
+            percCls  = 'perc-success';
+        } else if (pct < 30) {
+            barColor = 'linear-gradient(90deg,#ef4444,#dc2626)';
+            stClass  = 'status-danger'; stText = 'Perlu Dikejar'; percCls = 'perc-danger';
         }
 
-        async function fetchData() {
-            const loadingEl = document.getElementById('loading');
-            const listEl = document.getElementById('dataList');
-            const errorEl = document.getElementById('error');
+        const li = document.createElement('li');
+        li.className = 'item-card';
+        li.innerHTML = `
+            <div class="item-header">
+                <div class="title-wrap">
+                    <span class="item-title">${capFirst(item.label)}</span>
+                    <span class="status-badge ${stClass}">${stText}</span>
+                </div>
+                <span class="item-percentage ${percCls}">${Math.round(pct)}%</span>
+            </div>
+            <div class="progress-container">
+                <div class="progress-bar" data-width="${pct}%" style="background:${barColor};"></div>
+            </div>
+            <div class="stats-row">
+                <span>Target:<span class="stat-val">${target}</span></span>
+                <span>Terjual:<span class="stat-val val-green">${tercapai}</span></span>
+                <span>Kurang:<span class="stat-val ${kekurangan>0?'val-red':''}">${kekurangan}</span></span>
+            </div>`;
+        listEl.appendChild(li);
+    });
 
-            try {
-                const response = await fetch(CONST_GAS_URL);
-                const data = await response.json();
+    currentGrandTercapai = gTercapai;
+    currentGrandTarget   = gTarget;
+    const gPct = gTarget > 0 ? Math.min(Math.round((gTercapai/gTarget)*100), 100) : 0;
 
-                if (data.status === 'success') {
-                    renderList(data.items);
-                    loadingEl.style.display = 'none';
-                    listEl.style.display = 'block';
-                    
-                    setTimeout(() => {
-                        const bars = document.querySelectorAll('.progress-bar');
-                        bars.forEach(bar => {
-                            bar.style.width = bar.getAttribute('data-width');
-                        });
-                    }, 50);
+    const badge = document.getElementById('grandPercentage');
+    badge.innerText = gPct + '%';
+    if      (gPct >= 50) { badge.style.backgroundColor='rgba(16,185,129,.4)'; badge.style.borderColor='rgba(16,185,129,.6)'; }
+    else if (gPct  < 30) { badge.style.backgroundColor='rgba(239,68,68,.4)';  badge.style.borderColor='rgba(239,68,68,.6)'; }
+    else                 { badge.style.backgroundColor='rgba(255,255,255,.2)'; badge.style.borderColor='rgba(255,255,255,.3)'; }
 
-                } else {
-                    throw new Error(data.message);
-                }
-            } catch (error) {
-                console.error("Error fetching data:", error);
-                loadingEl.style.display = 'none';
-                errorEl.style.display = 'block';
-            }
-        }
+    document.getElementById('grandTercapai').innerText = gTercapai;
+    document.getElementById('grandTarget').innerText   = gTarget;
+    document.getElementById('totalSummary').style.display = 'flex';
+    document.getElementById('rekapSection').style.display = 'block';
 
-        function renderList(items) {
-            const listEl = document.getElementById('dataList');
-            listEl.innerHTML = ''; 
+    initRekapFilter();
+    renderListRekap();
+    checkAutoRekap();
+}
 
-            let grandTotalTarget = 0;
-            let grandTotalTercapai = 0;
+/* ================================================================
+   AUTO-REKAP — cek setiap kali halaman dimuat
+   Kondisi: hari ini = hari terakhir bulan & belum auto-rekap bulan ini
+================================================================ */
+function checkAutoRekap() {
+    const now      = new Date();
+    const lastDay  = new Date(now.getFullYear(), now.getMonth()+1, 0).getDate();
+    if (now.getDate() !== lastDay) return;   // bukan hari terakhir → skip
 
-            items.forEach(item => {
-                const li = document.createElement('li');
-                li.className = 'item-card';
-                
-                const target = parseInt(item.target) || 0;
-                let kekurangan = parseInt(item.val) || 0;
-                
-                if (kekurangan < 0) kekurangan = 0; 
-                let tercapai = target - kekurangan;
-                if (tercapai < 0) tercapai = 0;
+    const bulanKey = `${now.getFullYear()}-${String(now.getMonth()+1).padStart(2,'0')}`;
+    if (localStorage.getItem(LAST_AUTO_KEY) === bulanKey) return;  // sudah auto bulan ini → skip
 
-                grandTotalTarget += target;
-                grandTotalTercapai += tercapai;
+    simpanRekapBulanIni(true);
+    localStorage.setItem(LAST_AUTO_KEY, bulanKey);
+}
 
-                let percentage = 0;
-                if (target > 0) {
-                    percentage = (tercapai / target) * 100;
-                }
-                if (percentage > 100) percentage = 100;
+/* ================================================================
+   REKAP — CRUD
+================================================================ */
+function getRekapData()    { try { return JSON.parse(localStorage.getItem(REKAP_KEY)) || []; } catch { return []; } }
+function saveRekapData(arr){ localStorage.setItem(REKAP_KEY, JSON.stringify(arr)); }
 
-                // --- LOGIKA PEWARNAAN BARU (MASTER IT) ---
-                let barColor = 'linear-gradient(90deg, #3b82f6, #2563eb)'; // Default Biru (30-49%)
-                let statusClass = 'status-warning';
-                let statusText = 'On Progress';
-                let percClass = 'perc-warning';
+function simpanRekapBulanIni(isAuto = false) {
+    if (currentGrandTarget === 0) { tampilNotif('⚠️ Data belum tersedia, muat ulang halaman.','warn'); return; }
 
-                if (percentage >= 50 || kekurangan === 0) {
-                    // Berubah Hijau jika >= 50%
-                    barColor = 'linear-gradient(90deg, #10b981, #059669)';
-                    statusClass = 'status-success';
-                    statusText = (percentage >= 100 || kekurangan === 0) ? 'Tercapai &#10003;' : 'Progress Baik';
-                    percClass = 'perc-success';
-                } else if (percentage < 30) {
-                    // Tetap Merah jika di bawah 30%
-                    barColor = 'linear-gradient(90deg, #ef4444, #dc2626)';
-                    statusClass = 'status-danger';
-                    statusText = 'Perlu Dikejar';
-                    percClass = 'perc-danger';
-                }
+    const now      = new Date();
+    const bulanIdx = now.getMonth();
+    const tahun    = now.getFullYear();
+    const bulanKey = `${tahun}-${String(bulanIdx+1).padStart(2,'0')}`;
+    const pct      = Math.min(Math.round((currentGrandTercapai/currentGrandTarget)*100), 100);
+    const tanggal  = now.toLocaleDateString('id-ID', {day:'numeric', month:'short', year:'numeric'});
 
-                const formattedPercentage = Math.round(percentage) + '%';
+    const entry = {
+        bulanKey, bulanNama: NAMA_BULAN[bulanIdx], tahun,
+        tercapai: currentGrandTercapai, target: currentGrandTarget,
+        persentase: pct, tanggalSimpan: tanggal, isAuto,
+        detail: currentItems.map(i => ({...i}))
+    };
 
-                const htmlContent = `
-                    <div class="item-header">
-                        <div class="title-wrap">
-                            <span class="item-title">${capitalizeFirstLetter(item.label)}</span>
-                            <span class="status-badge ${statusClass}">${statusText}</span>
+    let rekap = getRekapData();
+    const idx = rekap.findIndex(r => r.bulanKey === bulanKey);
+    if (idx >= 0) {
+        rekap[idx] = entry;
+        if (!isAuto) tampilNotif(`✅ Rekap ${NAMA_BULAN[bulanIdx]} ${tahun} diperbarui!`, 'ok');
+    } else {
+        rekap.push(entry);
+        if (!isAuto) tampilNotif(`✅ Rekap ${NAMA_BULAN[bulanIdx]} ${tahun} disimpan!`, 'ok');
+    }
+
+    rekap.sort((a,b) => b.bulanKey.localeCompare(a.bulanKey));
+    saveRekapData(rekap);
+    initRekapFilter();
+    renderListRekap();
+    if (isAuto) showAutoToast(`🤖 Auto-rekap ${NAMA_BULAN[bulanIdx]} ${tahun} tersimpan!`);
+}
+
+function hapusRekap(bulanKey) {
+    if (!confirm('Yakin hapus rekap bulan ini?')) return;
+    saveRekapData(getRekapData().filter(r => r.bulanKey !== bulanKey));
+    initRekapFilter(); renderListRekap();
+}
+
+function hapusSemuaRekap() {
+    if (!confirm('Yakin hapus SEMUA data rekap?')) return;
+    saveRekapData([]);
+    initRekapFilter(); renderListRekap();
+    tampilNotif('🗑 Semua data rekap dihapus.', 'warn');
+}
+
+/* ================================================================
+   REKAP — RENDER UI
+================================================================ */
+function initRekapFilter() {
+    const years = [...new Set(getRekapData().map(r => r.tahun))].sort((a,b)=>b-a);
+    const sel   = document.getElementById('filterTahun');
+    const cur   = sel.value;
+    sel.innerHTML = '<option value="semua">Semua Tahun</option>';
+    years.forEach(y => {
+        const o = document.createElement('option');
+        o.value = y; o.textContent = y;
+        if (String(y) === cur) o.selected = true;
+        sel.appendChild(o);
+    });
+}
+
+function renderListRekap() {
+    const rekap    = getRekapData();
+    const filter   = document.getElementById('filterTahun').value;
+    const filtered = filter === 'semua' ? rekap : rekap.filter(r => String(r.tahun)===filter);
+    const cont     = document.getElementById('rekapListContainer');
+
+    if (!filtered.length) {
+        cont.innerHTML = `<div class="rekap-empty">
+            <div class="empty-icon">📋</div>
+            <p>Belum ada data rekap.<br>
+            Klik <strong>"Simpan Rekap Bulan Ini"</strong> atau tunggu auto-rekap di hari terakhir bulan.</p>
+        </div>`;
+        return;
+    }
+
+    const sumTercapai = filtered.reduce((s,r)=>s+r.tercapai,0);
+    const sumTarget   = filtered.reduce((s,r)=>s+r.target,0);
+    const sumPct      = sumTarget>0 ? Math.min(Math.round((sumTercapai/sumTarget)*100),100) : 0;
+
+    let html = filtered.map(r => {
+        const bc       = bCls(r.persentase);
+        const detailId = `detail-${r.bulanKey}`;
+        const autoTag  = r.isAuto ? '<span class="auto-tag">🤖 Auto</span>' : '';
+
+        // Baris produk
+        let prodRows = '';
+        if (r.detail && r.detail.length) {
+            prodRows = r.detail.map(d => {
+                const col = d.persentase>=50 ? '#10b981' : d.persentase<30 ? '#ef4444' : '#f59e0b';
+                return `<tr>
+                    <td style="font-weight:600">${d.label}</td>
+                    <td>${d.target}</td>
+                    <td class="prod-terjual">${d.tercapai}</td>
+                    <td class="${d.kekurangan>0?'prod-kurang':'val-green'}">${d.kekurangan}</td>
+                    <td>
+                        <div style="display:flex;align-items:center;justify-content:flex-end;gap:4px;">
+                            <div class="mini-bar-wrap"><div class="mini-bar" style="width:${d.persentase}%;background:${col}"></div></div>
+                            <span style="font-weight:800;color:${col};font-size:12px;min-width:35px;text-align:right;">${d.persentase}%</span>
                         </div>
-                        <span class="item-percentage ${percClass}">${formattedPercentage}</span>
-                    </div>
-
-                    <div class="progress-container">
-                        <div class="progress-bar" data-width="${percentage}%" style="background: ${barColor};"></div>
-                    </div>
-
-                    <div class="stats-row">
-                        <span>Target:<span class="stat-val">${target}</span></span>
-                        <span>Terjual:<span class="stat-val val-green">${tercapai}</span></span>
-                        <span>Kurang:<span class="stat-val ${kekurangan > 0 ? 'val-red' : ''}">${kekurangan}</span></span>
-                    </div>
-                `;
-                
-                li.innerHTML = htmlContent;
-                listEl.appendChild(li);
-            });
-
-            // Kalkulasi Grand Percentage
-            let grandPercentage = 0;
-            if (grandTotalTarget > 0) {
-                grandPercentage = Math.round((grandTotalTercapai / grandTotalTarget) * 100);
-            }
-            if (grandPercentage > 100) grandPercentage = 100;
-
-            // Update UI Ringkasan Total & Warna Badge Header
-            const grandPercentageEl = document.getElementById('grandPercentage');
-            grandPercentageEl.innerText = grandPercentage + '%';
-            
-            // Logic warna dinamis untuk badge persentase besar
-            if (grandPercentage >= 50) {
-                grandPercentageEl.style.backgroundColor = "rgba(16, 185, 129, 0.4)"; // Soft Green
-                grandPercentageEl.style.borderColor = "rgba(16, 185, 129, 0.6)";
-            } else if (grandPercentage < 30) {
-                grandPercentageEl.style.backgroundColor = "rgba(239, 68, 68, 0.4)"; // Soft Red
-                grandPercentageEl.style.borderColor = "rgba(239, 68, 68, 0.6)";
-            } else {
-                grandPercentageEl.style.backgroundColor = "rgba(255, 255, 255, 0.2)"; // Default Glass
-                grandPercentageEl.style.borderColor = "rgba(255, 255, 255, 0.3)";
-            }
-
-            document.getElementById('grandTercapai').innerText = grandTotalTercapai;
-            document.getElementById('grandTarget').innerText = grandTotalTarget;
-            document.getElementById('totalSummary').style.display = 'flex'; 
+                    </td>
+                </tr>`;
+            }).join('');
+        } else {
+            prodRows = `<tr><td colspan="5" style="text-align:center;color:var(--text-muted);padding:12px;">Tidak ada detail produk</td></tr>`;
         }
 
-        function capitalizeFirstLetter(string) {
-            if (!string) return "";
-            return string.split(' ').map(word => word.charAt(0).toUpperCase() + word.slice(1)).join(' ');
-        }
+        return `
+        <div class="rekap-month-card">
+            <div class="rekap-month-header" id="hdr-${r.bulanKey}" onclick="toggleDetail('${r.bulanKey}')">
+                <div style="min-width:0">
+                    <div class="rekap-month-title">${r.bulanNama} ${r.tahun} ${autoTag}</div>
+                    <div class="rekap-month-meta">
+                        Disimpan: ${r.tanggalSimpan} &nbsp;·&nbsp;
+                        <span style="color:#10b981;font-weight:700">${r.tercapai.toLocaleString('id-ID')} terjual</span>
+                        / ${r.target.toLocaleString('id-ID')} target
+                    </div>
+                </div>
+                <div class="rekap-month-right">
+                    <span class="rekap-perc-badge ${bc}">${r.persentase}%</span>
+                    <span class="chevron" id="chv-${r.bulanKey}">▾</span>
+                    <button class="btn-del-month" onclick="event.stopPropagation();hapusRekap('${r.bulanKey}')" title="Hapus">✕</button>
+                </div>
+            </div>
+            <div class="rekap-detail" id="${detailId}">
+                <!-- Grand total bulan -->
+                <div class="rekap-grand-row">
+                    <div>
+                        <div class="rg-label">Total Terjual</div>
+                        <div class="rg-val">${r.tercapai.toLocaleString('id-ID')} <span class="rg-pcs">pcs</span></div>
+                    </div>
+                    <div>
+                        <div class="rg-label">Target Bulan</div>
+                        <div class="rg-val">${r.target.toLocaleString('id-ID')} <span class="rg-pcs">pcs</span></div>
+                    </div>
+                    <div>
+                        <span class="rekap-perc-badge" style="background:rgba(255,255,255,.2);color:#fff;font-size:20px;padding:6px 14px;">${r.persentase}%</span>
+                    </div>
+                </div>
+                <!-- Tabel detail produk -->
+                <div class="section-label">Detail Per Produk</div>
+                <div class="prod-table-wrap">
+                    <table class="prod-table">
+                        <thead>
+                            <tr>
+                                <th>Produk</th>
+                                <th style="text-align:right">Target</th>
+                                <th style="text-align:right">Terjual</th>
+                                <th style="text-align:right">Kurang</th>
+                                <th style="text-align:right">Capaian</th>
+                            </tr>
+                        </thead>
+                        <tbody>${prodRows}</tbody>
+                    </table>
+                </div>
+            </div>
+        </div>`;
+    }).join('');
 
-        document.addEventListener('DOMContentLoaded', () => {
-            updateDateAndDeadline(); 
-            fetchData();
-        });
-    </script>
+    // Footer grand summary
+    const sfx = bCls(sumPct);
+    html += `
+    <div class="rekap-grand-summary">
+        <div>
+            <div class="rgs-label">📌 Total Keseluruhan (${filtered.length} bulan)</div>
+            <div class="rgs-val">${sumTercapai.toLocaleString('id-ID')} pcs</div>
+            <div class="rgs-sub">dari target ${sumTarget.toLocaleString('id-ID')} pcs</div>
+        </div>
+        <span class="rekap-perc-badge" style="background:rgba(255,255,255,.15);color:#fff;font-size:22px;padding:8px 16px;border:1.5px solid rgba(255,255,255,.3);">${sumPct}%</span>
+    </div>`;
+
+    cont.innerHTML = html;
+}
+
+/* Toggle detail per bulan */
+function toggleDetail(bulanKey) {
+    const det = document.getElementById(`detail-${bulanKey}`);
+    const hdr = document.getElementById(`hdr-${bulanKey}`);
+    const chv = document.getElementById(`chv-${bulanKey}`);
+    const open = det.classList.toggle('open');
+    hdr.classList.toggle('detail-open', open);
+    if (chv) { chv.textContent = open ? '▴' : '▾'; chv.classList.toggle('open', open); }
+}
+
+/* Toggle panel rekap utama */
+function toggleRekap() {
+    const body  = document.getElementById('rekapBody');
+    const label = document.getElementById('rekapToggleLabel');
+    const open  = body.classList.toggle('open');
+    label.textContent = open ? 'Tutup ▴' : 'Lihat ▾';
+}
+
+/* ================================================================
+   NOTIFIKASI & TOAST
+================================================================ */
+function tampilNotif(pesan, type) {
+    const el = document.getElementById('rekapNotif');
+    el.textContent = pesan;
+    el.style.display = 'block';
+    el.style.background = type==='ok' ? '#d1fae5' : '#fef3c7';
+    el.style.color      = type==='ok' ? '#065f46' : '#92400e';
+    el.style.border     = type==='ok' ? '1px solid #6ee7b7' : '1px solid #fcd34d';
+    clearTimeout(el._t);
+    el._t = setTimeout(() => el.style.display='none', 3500);
+}
+
+function showAutoToast(msg) {
+    const t = document.createElement('div');
+    t.className   = 'auto-rekap-toast';
+    t.textContent = msg;
+    document.body.appendChild(t);
+    setTimeout(() => { t.classList.add('hide'); setTimeout(() => t.remove(), 500); }, 4500);
+}
+
+/* ================================================================
+   UTILS
+================================================================ */
+function bCls(pct) { return pct>=50 ? 'rekap-perc-green' : pct<30 ? 'rekap-perc-red' : 'rekap-perc-orange'; }
+function capFirst(s) { if (!s) return ''; return s.split(' ').map(w => w.charAt(0).toUpperCase()+w.slice(1)).join(' '); }
+
+/* ================================================================
+   INIT
+================================================================ */
+document.addEventListener('DOMContentLoaded', () => {
+    updateDateAndDeadline();
+    fetchData();
+});
+</script>
 </body>
 </html>
