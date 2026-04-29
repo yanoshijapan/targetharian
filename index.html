@@ -378,24 +378,39 @@ function renderList(items) {
     items.forEach(item => {
         const target     = parseInt(item.target) || 0;
         const kekurangan = Math.max(parseInt(item.val) || 0, 0);
+        // tercapai = terjual sesungguhnya (bisa menembus target)
         const tercapai   = Math.max(target - kekurangan, 0);
-        const pct        = target > 0 ? Math.min((tercapai/target)*100, 100) : 0;
+        // terjualAsli = angka terjual nyata dari backend (tanpa dibatasi target)
+        // Jika kekurangan = 0, berarti sudah >= target, tapi backend mungkin kirim
+        // angka lebih. Kita hitung dari: terjual = target - kekurangan (bisa negatif
+        // jika menembus), sehingga jika kekurangan < 0 maka terjual > target.
+        const rawKekurangan = parseInt(item.val) || 0; // bisa negatif jika menembus
+        const terjualAsli   = target - rawKekurangan;   // angka terjual sesungguhnya
+        // progress bar & persentase tetap cap 100%
+        const pct        = target > 0 ? Math.min((terjualAsli/target)*100, 100) : 0;
+        // kekurangan tampilan: 0 jika sudah >= target
+        const kekuranganTampil = terjualAsli >= target ? 0 : kekurangan;
 
         gTarget   += target;
-        gTercapai += tercapai;
-        currentItems.push({ label: capFirst(item.label), target, tercapai, kekurangan, persentase: Math.round(pct) });
+        gTercapai += terjualAsli;
+        currentItems.push({ label: capFirst(item.label), target, tercapai: terjualAsli, kekurangan: kekuranganTampil, persentase: Math.round(pct) });
 
         let barColor = 'linear-gradient(90deg,#3b82f6,#2563eb)';
         let stClass  = 'status-warning', stText = 'On Progress', percCls = 'perc-warning';
-        if (pct >= 50 || kekurangan === 0) {
+        if (pct >= 50 || kekuranganTampil === 0) {
             barColor = 'linear-gradient(90deg,#10b981,#059669)';
             stClass  = 'status-success';
-            stText   = (pct >= 100 || kekurangan === 0) ? 'Tercapai &#10003;' : 'Progress Baik';
+            stText   = (pct >= 100 || kekuranganTampil === 0) ? 'Tercapai &#10003;' : 'Progress Baik';
             percCls  = 'perc-success';
         } else if (pct < 30) {
             barColor = 'linear-gradient(90deg,#ef4444,#dc2626)';
             stClass  = 'status-danger'; stText = 'Perlu Dikejar'; percCls = 'perc-danger';
         }
+
+        // Label terjual: tampilkan angka sesungguhnya, dan beri tanda bonus jika menembus target
+        const terjualLabel = terjualAsli > target
+            ? `${terjualAsli} <span style="font-size:10px;color:#059669;font-weight:700;">+${terjualAsli-target}</span>`
+            : `${terjualAsli}`;
 
         const li = document.createElement('li');
         li.className = 'item-card';
@@ -408,25 +423,28 @@ function renderList(items) {
                 <span class="item-percentage ${percCls}">${Math.round(pct)}%</span>
             </div>
             <div class="progress-container">
-                <div class="progress-bar" data-width="${pct}%" style="background:${barColor};"></div>
+                <div class="progress-bar" data-width="${Math.min(pct,100)}%" style="background:${barColor};"></div>
             </div>
             <div class="stats-row">
                 <span>Target:<span class="stat-val">${target}</span></span>
-                <span>Terjual:<span class="stat-val val-green">${tercapai}</span></span>
-                <span>Kurang:<span class="stat-val ${kekurangan>0?'val-red':''}">${kekurangan}</span></span>
+                <span>Terjual:<span class="stat-val val-green">${terjualLabel}</span></span>
+                <span>Kurang:<span class="stat-val ${kekuranganTampil>0?'val-red':''}">${kekuranganTampil}</span></span>
             </div>`;
         listEl.appendChild(li);
     });
 
     currentGrandTercapai = gTercapai;
     currentGrandTarget   = gTarget;
-    const gPct = gTarget > 0 ? Math.min(Math.round((gTercapai/gTarget)*100), 100) : 0;
+    // Grand percentage: boleh melebihi 100% jika total terjual menembus total target
+    const gPct = gTarget > 0 ? Math.round((gTercapai/gTarget)*100) : 0;
+    const gPctDisplay = gPct; // tampilkan apa adanya termasuk > 100%
 
     const badge = document.getElementById('grandPercentage');
-    badge.innerText = gPct + '%';
-    if      (gPct >= 50) { badge.style.backgroundColor='rgba(16,185,129,.4)'; badge.style.borderColor='rgba(16,185,129,.6)'; }
-    else if (gPct  < 30) { badge.style.backgroundColor='rgba(239,68,68,.4)';  badge.style.borderColor='rgba(239,68,68,.6)'; }
-    else                 { badge.style.backgroundColor='rgba(255,255,255,.2)'; badge.style.borderColor='rgba(255,255,255,.3)'; }
+    badge.innerText = gPctDisplay + '%';
+    if      (gPctDisplay >= 100){ badge.style.backgroundColor='rgba(16,185,129,.5)'; badge.style.borderColor='rgba(16,185,129,.8)'; badge.style.color='#d1fae5'; }
+    else if (gPctDisplay >= 50) { badge.style.backgroundColor='rgba(16,185,129,.4)'; badge.style.borderColor='rgba(16,185,129,.6)'; }
+    else if (gPctDisplay  < 30) { badge.style.backgroundColor='rgba(239,68,68,.4)';  badge.style.borderColor='rgba(239,68,68,.6)'; }
+    else                        { badge.style.backgroundColor='rgba(255,255,255,.2)'; badge.style.borderColor='rgba(255,255,255,.3)'; }
 
     document.getElementById('grandTercapai').innerText = gTercapai;
     document.getElementById('grandTarget').innerText   = gTarget;
@@ -467,7 +485,7 @@ function simpanRekapBulanIni(isAuto = false) {
     const bulanIdx = now.getMonth();
     const tahun    = now.getFullYear();
     const bulanKey = `${tahun}-${String(bulanIdx+1).padStart(2,'0')}`;
-    const pct      = Math.min(Math.round((currentGrandTercapai/currentGrandTarget)*100), 100);
+    const pct      = currentGrandTarget > 0 ? Math.round((currentGrandTercapai/currentGrandTarget)*100) : 0;
     const tanggal  = now.toLocaleDateString('id-ID', {day:'numeric', month:'short', year:'numeric'});
 
     const entry = {
@@ -540,7 +558,7 @@ function renderListRekap() {
 
     const sumTercapai = filtered.reduce((s,r)=>s+r.tercapai,0);
     const sumTarget   = filtered.reduce((s,r)=>s+r.target,0);
-    const sumPct      = sumTarget>0 ? Math.min(Math.round((sumTercapai/sumTarget)*100),100) : 0;
+    const sumPct      = sumTarget>0 ? Math.round((sumTercapai/sumTarget)*100) : 0;
 
     let html = filtered.map(r => {
         const bc       = bCls(r.persentase);
@@ -555,11 +573,11 @@ function renderListRekap() {
                 return `<tr>
                     <td style="font-weight:600">${d.label}</td>
                     <td>${d.target}</td>
-                    <td class="prod-terjual">${d.tercapai}</td>
+                    <td class="prod-terjual">${d.tercapai > d.target ? `${d.tercapai} <span style="font-size:10px;color:#059669;font-weight:700;">+${d.tercapai-d.target}</span>` : d.tercapai}</td>
                     <td class="${d.kekurangan>0?'prod-kurang':'val-green'}">${d.kekurangan}</td>
                     <td>
                         <div style="display:flex;align-items:center;justify-content:flex-end;gap:4px;">
-                            <div class="mini-bar-wrap"><div class="mini-bar" style="width:${d.persentase}%;background:${col}"></div></div>
+                            <div class="mini-bar-wrap"><div class="mini-bar" style="width:${Math.min(d.persentase,100)}%;background:${col}"></div></div>
                             <span style="font-weight:800;color:${col};font-size:12px;min-width:35px;text-align:right;">${d.persentase}%</span>
                         </div>
                     </td>
